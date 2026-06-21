@@ -31,8 +31,8 @@
         <module>ai-service</module>
         <module>analytics</module>
         <module>home-school</module>
-        <!-- 以下模块待按 school-org 模板规范开发后，逐个取消注释启用（严禁建空壳 pom 占位）：
         <module>ruoyi-base</module>
+        <!-- 待启用：
         -->
     </modules>
 
@@ -100,6 +100,11 @@
             <dependency>
                 <groupId>com.eduplatform</groupId>
                 <artifactId>home-school</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.eduplatform</groupId>
+                <artifactId>ruoyi-base</artifactId>
                 <version>${project.version}</version>
             </dependency>
 

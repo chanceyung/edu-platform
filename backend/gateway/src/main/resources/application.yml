@@ -52,6 +52,14 @@ tenant:
   enable: true
   ignore-tables: [sys_tenant, sys_dict]
 
+# Flyway 自动迁移
+spring.flyway:
+  enabled: true
+  baseline-on-migrate: true
+  baseline-version: 0
+  locations: classpath:db/migration
+  table: flyway_schema_history
+
 # MinIO 文件存储
 minio:
   endpoint: ${MINIO_ENDPOINT:http://localhost:9000}
