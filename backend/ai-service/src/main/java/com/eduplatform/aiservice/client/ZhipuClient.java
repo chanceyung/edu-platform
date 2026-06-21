@@ -68,6 +68,35 @@ public class ZhipuClient {
     public String getStandardModel() { return standardModel; }
     public String getLiteModel() { return liteModel; }
 
+    @Value("${zhipu.models.embedding:embedding-3}") private String embeddingModel;
+
+    /** 向量化文本（Embedding-3，2048维） */
+    @SuppressWarnings("unchecked")
+    public String embed(String text) {
+        if (apiKey == null || apiKey.isBlank()) {
+            throw new IllegalStateException("智谱 API Key 未配置");
+        }
+        try {
+            String body = json.writeValueAsString(Map.of("model", embeddingModel, "input", text));
+            HttpRequest req = HttpRequest.newBuilder()
+                    .uri(URI.create(baseUrl + "/embeddings"))
+                    .header("Authorization", "Bearer " + apiKey)
+                    .header("Content-Type", "application/json")
+                    .timeout(Duration.ofSeconds(30))
+                    .POST(HttpRequest.BodyPublishers.ofString(body))
+                    .build();
+            HttpResponse<String> resp = http.send(req, HttpResponse.BodyHandlers.ofString());
+            if (resp.statusCode() != 200) {
+                throw new RuntimeException("Embedding API 返回 " + resp.statusCode() + ": " + resp.body());
+            }
+            JsonNode node = json.readTree(resp.body());
+            return json.writeValueAsString(node.at("/data/0/embedding"));
+        } catch (RuntimeException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("Embedding 调用失败: " + e.getMessage(), e);
+        }
+    }
     // ===== 核心调用 =====
 
     private ChatResult doChat(String model, List<ChatMessage> messages, String toolsJson) {
