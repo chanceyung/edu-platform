@@ -33,6 +33,11 @@ public class UserContext {
         return ctx != null ? ctx.getUsername() : "system";
     }
 
+    public static String currentRoleCode() {
+        UserContext ctx = get();
+        return ctx != null ? ctx.getRoleCode() : null;
+    }
+
     public static String currentTenantId() {
         UserContext ctx = get();
         return ctx != null ? ctx.getTenantId() : "default";

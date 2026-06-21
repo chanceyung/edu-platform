@@ -41,8 +41,9 @@ zhipu:
   base-url: https://open.bigmodel.cn/api/paas/v4
   api-key: ${ZHIPU_API_KEY:}  # 必须用环境变量，严禁入库
   models:
-    flagship: glm-5.2          # 复杂长程任务
-    lite: glm-4-air            # 高频低成本
+    flagship: glm-5.2          # 最高级：Agent编排/备课/复杂推理
+    standard: glm-5.1          # 一般：AI批改/AI评语/学情分析
+    lite: glm-4.7              # 轻量：简单问答/消息生成/降本
     vision: glm-5v-turbo       # 多模态识图
     image: cogview-3-plus      # 文生图
     embedding: embedding-3     # 向量化

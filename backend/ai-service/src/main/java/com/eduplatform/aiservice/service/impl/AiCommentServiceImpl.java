@@ -29,7 +29,7 @@ public class AiCommentServiceImpl implements AiCommentService {
     private final HomeworkSubmissionMapper submissionMapper;
     private final AiTaskLogMapper logMapper;
 
-    @Value("${zhipu.models.flagship:glm-5.2}") private String model;
+    @Value("${zhipu.models.standard:glm-5.1}") private String model;
 
     @Override
     public String generateComment(Long studentId) {
@@ -64,7 +64,7 @@ public class AiCommentServiceImpl implements AiCommentService {
                 + "请直接输出评语，不要加引号或其他标记。";
 
         long start = System.currentTimeMillis();
-        ZhipuClient.ChatResult result = zhipu.chat(List.of(new ZhipuClient.ChatMessage("user", prompt)));
+        ZhipuClient.ChatResult result = zhipu.chatStandard(List.of(new ZhipuClient.ChatMessage("user", prompt)));
 
         // 写 ai_task_log
         AiTaskLog taskLog = new AiTaskLog();
