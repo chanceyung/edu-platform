@@ -11,6 +11,12 @@ const routes: RouteRecordRaw[] = [
     meta: { title: '学校管理' }
   },
   {
+    path: '/qbank/knowledge-tree',
+    name: 'KnowledgeTree',
+    component: () => import('../views/knowledge/KnowledgeTree.vue'),
+    meta: { title: '知识点树' }
+  },
+  {
     path: '/qbank/questions',
     name: 'QuestionManage',
     component: () => import('../views/question/QuestionManage.vue'),

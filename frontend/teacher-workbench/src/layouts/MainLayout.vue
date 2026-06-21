@@ -8,6 +8,7 @@ const router = useRouter()
 const menus = [
   { index: '/org/schools', title: '学校管理' },
   { index: '/agent', title: '🤖 Agent工作台' },
+  { index: '/qbank/knowledge-tree', title: '知识点树' },
   { index: '/qbank/questions', title: '题库管理' },
   { index: '/exam/papers', title: '组卷管理' },
   { index: '/exam/exams', title: '考试管理' },

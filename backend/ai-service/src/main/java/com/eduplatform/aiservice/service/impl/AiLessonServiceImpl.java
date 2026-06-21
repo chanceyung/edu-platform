@@ -19,6 +19,7 @@ public class AiLessonServiceImpl implements AiLessonService {
 
     private final ZhipuClient zhipu;
     private final AiTaskLogMapper logMapper;
+    private final com.eduplatform.aiservice.rag.KbService kbService;
 
     @Value("${zhipu.models.flagship:glm-5.2}") private String model;
 
@@ -31,6 +32,14 @@ public class AiLessonServiceImpl implements AiLessonService {
                 + "请包含以下部分（用markdown格式）：\n"
                 + "## 教学目标\n## 教学重点与难点\n## 教学过程（导入/新授/练习/小结）\n## 课堂练习（3-5题）\n"
                 + "内容要具体、可操作，适合初中生。";
+
+        // RAG增强：从知识库检索相关知识点注入prompt
+        try {
+            prompt = kbService.augmentPrompt(prompt, grade + " " + topic + " 教案");
+            log.info("RAG增强备课：注入了知识库参考");
+        } catch (Exception e) {
+            log.warn("RAG增强失败，使用原始prompt: {}", e.getMessage());
+        }
 
         long start = System.currentTimeMillis();
         ZhipuClient.ChatResult result = zhipu.chat(List.of(new ZhipuClient.ChatMessage("user", prompt)));

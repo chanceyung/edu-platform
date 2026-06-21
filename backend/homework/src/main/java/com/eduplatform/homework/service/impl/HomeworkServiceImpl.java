@@ -21,6 +21,7 @@ public class HomeworkServiceImpl implements HomeworkService {
 
     private final HomeworkMapper homeworkMapper;
     private final OrgClassMapper classMapper;
+    private final com.eduplatform.ruoyibase.security.DataScopeHelper dataScopeHelper;
 
     @Override
     public Long create(HomeworkSaveDTO dto) {
@@ -42,9 +43,12 @@ public class HomeworkServiceImpl implements HomeworkService {
 
     @Override
     public List<Homework> listByClass(Long classId) {
-        return homeworkMapper.selectList(new LambdaQueryWrapper<Homework>()
-                .eq(Homework::getClassId, classId)
-                .orderByDesc(Homework::getCreateTime));
+        LambdaQueryWrapper<Homework> wrapper = new LambdaQueryWrapper<Homework>()
+                .eq(classId != null, Homework::getClassId, classId)
+                .orderByDesc(Homework::getCreateTime);
+        // 数据权限：教师只见自己任课班级
+        dataScopeHelper.applyClassScope(wrapper, Homework::getClassId);
+        return homeworkMapper.selectList(wrapper);
     }
 
     @Override
