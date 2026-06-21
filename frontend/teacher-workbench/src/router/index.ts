@@ -1,7 +1,9 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
+import { getToken } from '../utils/auth'
 
 const routes: RouteRecordRaw[] = [
-  { path: '/', redirect: '/org/schools' },
+  { path: '/login', name: 'Login', component: () => import('../views/auth/Login.vue'), meta: { public: true } },
+  { path: '/', redirect: '/agent' },
   {
     path: '/org/schools',
     name: 'SchoolManage',
@@ -73,6 +75,15 @@ const routes: RouteRecordRaw[] = [
 const router = createRouter({
   history: createWebHistory(),
   routes
+})
+
+// 路由守卫：未登录跳登录页
+router.beforeEach((to, _from, next) => {
+  if (to.meta.public || getToken()) {
+    next()
+  } else {
+    next('/login')
+  }
 })
 
 export default router

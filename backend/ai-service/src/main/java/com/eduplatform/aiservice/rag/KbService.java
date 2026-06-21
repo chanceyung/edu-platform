@@ -50,8 +50,9 @@ public class KbService {
             chunk.setChunkIndex(i);
             chunk.setMetadataJson(buildMetadata(subject, gradeLevel, title));
 
-            // 向量化
+            // 向量化（500ms间隔防API限流）
             try {
+                Thread.sleep(500); // 限流：每次embedding间隔500ms
                 String embedding = embed(chunks.get(i));
                 chunk.setEmbedding(embedding);
             } catch (Exception e) {
