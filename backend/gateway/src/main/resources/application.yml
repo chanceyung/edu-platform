@@ -1,0 +1,66 @@
+server:
+  port: 18080
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: edu-platform-gateway
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+  # 数据源（生产用环境变量注入，严禁硬编码凭据）
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/${MYSQL_DB:edu_platform}?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: ${MYSQL_USER:root}
+    password: ${MYSQL_PASSWORD:root}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+# MyBatis-Plus
+mybatis-plus:
+  mapper-locations: classpath*:mapper/**/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      logic-delete-field: isDeleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+# 智谱 GLM 网关配置（AI 能力统一经 ai-service 网关，业务模块禁止直连）
+zhipu:
+  base-url: https://open.bigmodel.cn/api/paas/v4
+  api-key: ${ZHIPU_API_KEY:}  # 必须用环境变量，严禁入库
+  models:
+    flagship: glm-5.2          # 复杂长程任务
+    lite: glm-4-air            # 高频低成本
+    vision: glm-5v-turbo       # 多模态识图
+    image: cogview-3-plus      # 文生图
+    embedding: embedding-3     # 向量化
+
+# 多租户（学校=租户，行级隔离）
+tenant:
+  enable: true
+  ignore-tables: [sys_tenant, sys_dict]
+
+# MinIO 文件存储
+minio:
+  endpoint: ${MINIO_ENDPOINT:http://localhost:9000}
+  access-key: ${MINIO_ACCESS_KEY:minioadmin}
+  secret-key: ${MINIO_SECRET_KEY:minioadmin}
+  bucket: ${MINIO_BUCKET:edu-platform}
+
+# 日志
+logging:
+  level:
+    com.eduplatform: INFO
+    org.springframework: WARN

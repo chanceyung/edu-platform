@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- gateway：聚合启动入口。依赖各业务模块，含启动类与运行时配置。 -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.eduplatform</groupId>
+        <artifactId>edu-platform-backend</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>gateway</artifactId>
+    <packaging>jar</packaging>
+    <name>gateway</name>
+    <description>聚合启动入口</description>
+
+    <dependencies>
+        <!-- 业务模块（按开发进度逐步引入）-->
+        <dependency>
+            <groupId>com.eduplatform</groupId>
+            <artifactId>school-org</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.eduplatform</groupId>
+            <artifactId>question-bank</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.eduplatform</groupId>
+            <artifactId>exam-engine</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.eduplatform</groupId>
+            <artifactId>homework</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.eduplatform</groupId>
+            <artifactId>ai-service</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.eduplatform</groupId>
+            <artifactId>analytics</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.eduplatform</groupId>
+            <artifactId>home-school</artifactId>
+        </dependency>
+
+        <!-- 运行时基础（启动入口集中依赖，业务模块只声明 api）-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
+        </dependency>
+
+        <!-- 测试 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>gateway</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>

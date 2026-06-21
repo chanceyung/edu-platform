@@ -1,0 +1,67 @@
+# 智慧教学平台 本地/单校部署（开发与单校私有化）
+# 多校 SaaS 用 K8s（见 k8s/ 目录，待补）
+# 启动：docker compose up -d
+version: "3.9"
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: edu-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD:-root}
+      MYSQL_DATABASE: edu_platform
+      TZ: Asia/Shanghai
+    ports:
+      - "3306:3306"
+    volumes:
+      - edu-mysql-data:/var/lib/mysql
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+
+  redis:
+    image: redis:7-alpine
+    container_name: edu-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - edu-redis-data:/data
+
+  minio:
+    image: minio/minio:latest
+    container_name: edu-minio
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY:-minioadmin}
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - edu-minio-data:/data
+
+  # 后端（镜像待构建，Dockerfile 见 backend/Dockerfile，待补）
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    container_name: edu-backend
+    restart: unless-stopped
+    depends_on: [mysql, redis, minio]
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      MYSQL_HOST: mysql
+      MYSQL_DB: edu_platform
+      MYSQL_USER: root
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-root}
+      REDIS_HOST: redis
+      MINIO_ENDPOINT: http://minio:9000
+      ZHIPU_API_KEY: ${ZHIPU_API_KEY}
+    ports:
+      - "8080:8080"
+
+volumes:
+  edu-mysql-data:
+  edu-redis-data:
+  edu-minio-data:
