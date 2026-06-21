@@ -7,6 +7,7 @@ const router = useRouter()
 // 侧边栏菜单（AI-first 演进，当前先传统管理布局）
 const menus = [
   { index: '/org/schools', title: '学校管理' },
+  { index: '/agent', title: '🤖 Agent工作台' },
   { index: '/qbank/questions', title: '题库管理' },
   { index: '/exam/papers', title: '组卷管理' },
   { index: '/exam/exams', title: '考试管理' },

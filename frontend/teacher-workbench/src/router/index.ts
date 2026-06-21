@@ -27,6 +27,12 @@ const routes: RouteRecordRaw[] = [
     meta: { title: '考试管理' }
   },
   {
+    path: '/agent',
+    name: 'AgentWorkbench',
+    component: () => import('../views/agent/AgentWorkbench.vue'),
+    meta: { title: 'AI Agent工作台' }
+  },
+  {
     path: '/ai/lesson',
     name: 'AiLesson',
     component: () => import('../views/ai/AiLesson.vue'),
